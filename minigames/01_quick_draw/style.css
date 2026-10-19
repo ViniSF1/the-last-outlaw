@@ -1,0 +1,461 @@
+/* ===================================================
+   MINIGAME 1: QUICK DRAW - DESIGN FAROESTE
+   =================================================== */
+
+:root {
+  --color-bg: #0c0806;
+  --color-wood: #22140c;
+  --color-wood-border: #4d2e1a;
+  --color-gold: #e6a13c;
+  --color-gold-bright: #ffd700;
+  --color-red: #8b1e17;
+  --color-red-bright: #e74c3c;
+  --color-parchment: #f0e4cc;
+  --font-western: 'Rye', serif;
+  --font-title: 'Cinzel', serif;
+  --font-mono: 'Special Elite', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: #f5eedb;
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 70%, rgba(0, 0, 0, 0.85) 100%);
+  z-index: 100;
+}
+
+/* Contêiner principal do duelo */
+.duel-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  max-width: 1200px;
+  max-height: 850px;
+  padding: 10px;
+  position: relative;
+}
+
+/* Cabeçalho */
+.duel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(180deg, #24140c 0%, #130a06 100%);
+  border: 2px solid var(--color-wood-border);
+  border-radius: 6px;
+  padding: 10px 18px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.duel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.duel-title-group h1 {
+  font-family: var(--font-western);
+  font-size: 1.3rem;
+  color: var(--color-gold-bright);
+  letter-spacing: 2px;
+}
+
+.badge {
+  background: var(--color-red);
+  color: #fff;
+  font-size: 0.68rem;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-family: var(--font-western);
+  letter-spacing: 1px;
+}
+
+.difficulty-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--color-gold);
+}
+
+.western-select {
+  background: #180c07;
+  color: #fff;
+  border: 1px solid var(--color-wood-border);
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.duel-nav-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pill-btn {
+  background: rgba(35, 20, 12, 0.85);
+  color: var(--color-gold);
+  border: 1px solid var(--color-wood-border);
+  padding: 6px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-western);
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pill-btn:hover {
+  background: var(--color-wood-border);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(230, 161, 60, 0.5);
+}
+
+/* Arena do Duelo */
+.duel-arena {
+  position: relative;
+  flex: 1;
+  border: 3px solid var(--color-wood-border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), 0 10px 30px rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.arena-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: contrast(1.1) brightness(0.95);
+  z-index: 1;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.flash-overlay {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.08s ease-out;
+}
+
+.fx-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* Banner Central com Contagem e Sinal DRAW! */
+.center-banner {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.countdown-text {
+  font-family: var(--font-western);
+  font-size: 2.2rem;
+  color: var(--color-gold-bright);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 20px rgba(230, 161, 60, 0.8);
+  letter-spacing: 3px;
+  transition: all 0.2s ease;
+}
+
+.draw-signal {
+  font-family: var(--font-western);
+  font-size: 5rem;
+  color: #ff2222;
+  text-shadow: 
+    0 0 10px #ffffff,
+    0 0 25px #ff2222,
+    0 0 50px #ff0000;
+  letter-spacing: 6px;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.1s ease;
+}
+
+.draw-signal.active {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+/* HUD do Duelo */
+.duel-hud {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+}
+
+.duelist-card {
+  background: rgba(18, 10, 6, 0.85);
+  border: 2px solid var(--color-wood-border);
+  padding: 10px 18px;
+  border-radius: 6px;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+}
+
+.duelist-card.player {
+  border-color: #2e7d32;
+  text-align: left;
+}
+
+.duelist-card.enemy {
+  border-color: var(--color-red);
+  text-align: right;
+}
+
+.card-role {
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  color: #a88d77;
+}
+
+.card-name {
+  font-family: var(--font-western);
+  font-size: 1rem;
+  color: var(--color-gold);
+  margin-bottom: 4px;
+}
+
+.reaction-time {
+  font-family: var(--font-title);
+  font-size: 1.35rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.versus-tag {
+  font-family: var(--font-western);
+  font-size: 1.5rem;
+  color: #d4af37;
+  text-shadow: 0 2px 6px #000;
+}
+
+/* Rodapé da Arena */
+.arena-footer {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 5, 3, 0.95) 100%);
+}
+
+.hint-text {
+  font-size: 0.88rem;
+  color: #e6c8a5;
+  text-shadow: 0 1px 3px #000;
+}
+
+.hint-text strong {
+  color: var(--color-gold-bright);
+}
+
+.draw-touch-btn {
+  background: linear-gradient(180deg, #b83226 0%, #6d150d 100%);
+  color: #fff;
+  border: 2px solid #ff4444;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-family: var(--font-western);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+  transition: all 0.15s ease;
+}
+
+.draw-touch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 68, 68, 0.6);
+}
+
+.draw-touch-btn:active {
+  transform: scale(0.96);
+}
+
+/* Modal de Resultado */
+.result-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 16px;
+}
+
+.result-modal.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.result-card {
+  background-color: var(--color-parchment);
+  background-image: 
+    radial-gradient(ellipse at center, #faf4e6 0%, #e6d3b3 100%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 4px);
+  color: #2b180d;
+  border: 4px solid #8d734a;
+  border-radius: 8px;
+  padding: 30px 24px;
+  max-width: 480px;
+  width: 95%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+  transform: scale(0.9);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.result-modal.visible .result-card {
+  transform: scale(1);
+}
+
+.result-badge {
+  display: inline-block;
+  background: #2e7d32;
+  color: #fff;
+  font-family: var(--font-western);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  padding: 4px 14px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.result-badge.defeat {
+  background: #a31919;
+}
+
+.result-badge.foul {
+  background: #e67e22;
+}
+
+.result-card h2 {
+  font-family: var(--font-western);
+  font-size: 1.5rem;
+  color: #4a2212;
+  margin-bottom: 10px;
+}
+
+.result-detail {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #5c3822;
+  margin-bottom: 20px;
+}
+
+.stats-comparison {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(141, 115, 74, 0.2);
+  border: 1px dashed #8d734a;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-box span {
+  display: block;
+  font-size: 0.72rem;
+  color: #7b5333;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.stat-box strong {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  color: #2b180d;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.western-btn {
+  background: linear-gradient(180deg, #7a3a22 0%, #4d1c0c 100%);
+  color: #fff;
+  border: 2px solid #331206;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-family: var(--font-western);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.15s ease;
+}
+
+.western-btn:hover {
+  background: linear-gradient(180deg, #94482b 0%, #642612 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.western-btn.primary {
+  background: linear-gradient(180deg, #d4af37 0%, #996515 100%);
+  color: #1a0f07;
+  border-color: #ffd700;
+  font-weight: bold;
+}
+
+.western-btn.primary:hover {
+  background: linear-gradient(180deg, #f5cf4a 0%, #b3791a 100%);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}

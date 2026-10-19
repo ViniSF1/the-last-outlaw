@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Outlaw - Minigame 1: Quick Draw</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Cinzel:wght@700;900&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="crt-overlay"></div>
+
+  <main class="duel-container">
+    <!-- Barra Superior de Controle e Dificuldade -->
+    <header class="duel-header">
+      <div class="duel-title-group">
+        <span class="badge">MINIGAME 1</span>
+        <h1>QUICK DRAW</h1>
+      </div>
+
+      <div class="duel-nav-actions">
+        <button id="toggleAudioBtn" class="pill-btn" title="Ligar/Desligar Som">
+          <span id="audioIcon">🔊</span>
+        </button>
+        <a href="../index.html" class="pill-btn">⬅ Hub de Duelos</a>
+      </div>
+    </header>
+
+    <!-- Arena do Duelo -->
+    <div class="duel-arena" id="duelArena">
+      <!-- Cenário de fundo faroeste -->
+      <img src="../../imagens/Cena 7 - história.png" alt="Rua de Duelo" class="arena-bg" id="arenaBg">
+      <div class="flash-overlay" id="flashOverlay"></div>
+      <canvas id="fxCanvas" class="fx-canvas"></canvas>
+
+      <!-- Cartaz Central de Status e Sinal -->
+      <div class="center-banner" id="centerBanner">
+        <div class="countdown-text" id="countdownText">PREPARE-SE...</div>
+        <div class="draw-signal" id="drawSignal">DRAW!</div>
+      </div>
+
+      <!-- Placar de Duelo (HUD de tempos) -->
+      <div class="duel-hud">
+        <div class="duelist-card player">
+          <span class="card-role">VOCÊ</span>
+          <span class="card-name">Elias Crowe</span>
+          <span class="reaction-time" id="playerTime">--- ms</span>
+        </div>
+
+        <div class="versus-tag">VS</div>
+
+        <div class="duelist-card enemy">
+          <span class="card-role">ADVERSÁRIO</span>
+          <span class="card-name" id="enemyName">Pistoleiro Renegado</span>
+          <span class="reaction-time" id="enemyTime">--- ms</span>
+        </div>
+      </div>
+
+      <!-- Dica inferior de controle -->
+      <footer class="arena-footer">
+        <span class="hint-text">Pressione <strong>ENTER</strong> (ou toque no botão) assim que surgir <strong>DRAW!</strong></span>
+        <button class="draw-touch-btn" id="drawTouchBtn">SACAR (ENTER)</button>
+      </footer>
+    </div>
+
+    <!-- Modal de Resultado -->
+    <div class="result-modal" id="resultModal" aria-hidden="true">
+      <div class="result-card" id="resultCard">
+        <div class="result-badge" id="resultBadge">VITÓRIA</div>
+        <h2 id="resultTitle">O MAIS RÁPIDO DO OESTE!</h2>
+        <p class="result-detail" id="resultDetail">Você sacou e disparou em 284 ms contra 420 ms do inimigo.</p>
+
+        <div class="stats-comparison">
+          <div class="stat-box player">
+            <span>SEU TEMPO</span>
+            <strong id="finalPlayerTime">284 ms</strong>
+          </div>
+          <div class="stat-box enemy">
+            <span>TEMPO DA IA</span>
+            <strong id="finalEnemyTime">420 ms</strong>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="western-btn primary" id="playAgainBtn">↺ Duelo Novamente (Espaço)</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

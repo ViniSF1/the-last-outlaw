@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Outlaw — Duelo 3: Deadeye Challenge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Rye&family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Back to Hub -->
+    <a href="../index.html" class="hub-link" id="btn-back-hub" title="Voltar ao Menu de Testes">
+      <span class="icon">&#8617;</span> MENU DE TESTES
+    </a>
+
+    <!-- Top HUD -->
+    <header id="hud-top">
+      <div class="hud-box player-hud">
+        <div class="hud-avatar">
+          <span class="avatar-badge">ELIAS</span>
+        </div>
+        <div class="hud-info">
+          <span class="name">ELIAS CROWE</span>
+          <div class="progress-container">
+            <div class="progress-bar player-bar" id="player-progress" style="width: 0%"></div>
+          </div>
+          <span class="score-text" id="player-score-text">0 / 0</span>
+        </div>
+      </div>
+
+      <div class="duel-center-info">
+        <h1 class="duel-title">DEADEYE CHALLENGE</h1>
+        <div class="match-timer" id="match-timer">0.000s</div>
+        <div class="stats-pill">
+          <span>PRECISÃO: <strong id="accuracy-stat">100%</strong></span>
+          <span class="sep">|</span>
+          <span>TIROS: <strong id="shots-stat">0</strong></span>
+        </div>
+      </div>
+
+      <div class="hud-box bot-hud">
+        <div class="hud-info text-right">
+          <span class="name" id="bot-name">BANDIDO "JACK"</span>
+          <div class="progress-container">
+            <div class="progress-bar bot-bar" id="bot-progress" style="width: 0%"></div>
+          </div>
+          <span class="score-text" id="bot-score-text">0 / 0</span>
+        </div>
+        <div class="hud-avatar bot-avatar">
+          <span class="avatar-badge red">BOT</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Active Target Shooting Arena -->
+    <main id="shooting-arena" class="arena-idle">
+      <!-- Target layer inside the arena bounds -->
+      <div id="targets-layer"></div>
+
+      <!-- Effects canvas for muzzle flash, bullet holes, smoke particles, sparks -->
+      <canvas id="fx-canvas"></canvas>
+
+      <!-- Center Signal / Announcer -->
+      <div id="signal-banner" class="hidden">
+        <span id="signal-text">READY</span>
+      </div>
+
+      <!-- Start Overlay Screen -->
+      <div id="start-overlay" class="overlay-panel">
+        <div class="parchment-modal">
+          <span class="wanted-seal">&#9733; DUELO DE MIRA &#9733;</span>
+          <h2 class="modal-title">DEADEYE CHALLENGE</h2>
+          <p class="modal-subtitle">Acerte a sequência numérica de alvos mais rápido que o pistoleiro inimigo!</p>
+          
+          <div class="instruction-box">
+            <div class="rule-row">
+              <span class="rule-icon">&#127919;</span>
+              <span><strong>Mecânica:</strong> Clicar nos alvos na ordem exata: <strong>1 &rarr; 2 &rarr; 3 &rarr; 4...</strong></span>
+            </div>
+            <div class="rule-row">
+              <span class="rule-icon">&#9888;</span>
+              <span><strong>Penalidade:</strong> Errar o alvo ou a ordem aplica delay e reduz sua precisão!</span>
+            </div>
+            <div class="rule-row">
+              <span class="rule-icon">&#9878;</span>
+              <span><strong>Competição:</strong> O bot atira simultaneamente na velocidade dele. Não perca tempo!</span>
+            </div>
+          </div>
+
+          <button id="btn-start" class="btn-western-action">
+            <span class="btn-border"></span>
+            INICIAR DUELO [ESPAÇO / CLIQUE]
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Modal Overlay -->
+      <div id="result-overlay" class="overlay-panel hidden">
+        <div class="parchment-modal result-card" id="result-card">
+          <div class="result-badge" id="result-badge">VITÓRIA!</div>
+          <h2 class="result-headline" id="result-title">O MAIS RÁPIDO DO OESTE!</h2>
+          <p class="result-narrative" id="result-desc">Você abateu o bandido antes que ele pudesse sacar.</p>
+
+          <div class="result-stats-grid">
+            <div class="stat-cell">
+              <span class="stat-lbl">SEU TEMPO</span>
+              <span class="stat-val highlight" id="res-player-time">0.000s</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-lbl">TEMPO DO BOT</span>
+              <span class="stat-val" id="res-bot-time">0.000s</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-lbl">PRECISÃO</span>
+              <span class="stat-val" id="res-accuracy">100%</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-lbl">DISPAROS FEITOS</span>
+              <span class="stat-val" id="res-shots">0 (0 erros)</span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button id="btn-restart" class="btn-western-action">
+              <span class="btn-border"></span>
+              JOGAR NOVAMENTE [ESPAÇO]
+            </button>
+            <a href="../index.html" class="btn-western-secondary">OUTROS TESTES</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Instructions Footer -->
+    <footer id="hud-bottom">
+      <div class="tip-bar">
+        <span>DICA: Use o mouse com agilidade. Clicar fora aplica coice no revólver e tempo de recuperação!</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

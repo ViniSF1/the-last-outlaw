@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Outlaw - Minigame 2: Keyboard Showdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Cinzel:wght@700;900&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="crt-overlay"></div>
+
+  <main class="duel-container">
+    <!-- Cabeçalho -->
+    <header class="duel-header">
+      <div class="duel-title-group">
+        <span class="badge">MINIGAME 2</span>
+        <h1>KEYBOARD SHOWDOWN</h1>
+      </div>
+
+      <div class="duel-nav-actions">
+        <button id="toggleAudioBtn" class="pill-btn" title="Ligar/Desligar Som">
+          <span id="audioIcon">🔊</span>
+        </button>
+        <a href="../index.html" class="pill-btn">⬅ Hub de Duelos</a>
+      </div>
+    </header>
+
+    <!-- Arena do Confronto -->
+    <div class="duel-arena" id="duelArena">
+      <img src="../../imagens/Cena 7 - história.png" alt="Rua de Duelo" class="arena-bg" id="arenaBg">
+      <div class="flash-overlay" id="flashOverlay"></div>
+      <canvas id="fxCanvas" class="fx-canvas"></canvas>
+
+      <!-- Painel Superior de Barras de Progresso Competitivas -->
+      <div class="progress-scoreboard">
+        <div class="progress-lane player">
+          <div class="lane-info">
+            <span>VOCÊ (Elias Crowe)</span>
+            <span id="playerKeysCount">0 / 5</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill player" id="playerBarFill"></div>
+          </div>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">0.00s</div>
+
+        <div class="progress-lane enemy">
+          <div class="lane-info">
+            <span id="enemyNameDisplay">Adversário</span>
+            <span id="enemyKeysCount">0 / 5</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill enemy" id="enemyBarFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Centro: Sequência de Teclas WASD em Pixel Art -->
+      <div class="sequence-stage" id="sequenceStage">
+        <div class="stage-state-text" id="stageStateText">PREPARE SUAS MÃOS...</div>
+        <div class="keys-display-container" id="keysDisplayContainer">
+          <!-- Teclas inseridas dinamicamente -->
+        </div>
+        <div class="penalty-indicator" id="penaltyIndicator">+300ms PENALIDADE!</div>
+      </div>
+
+      <!-- Rodapé: Dicas e Botões Virtuais para Mobile/Mouse -->
+      <footer class="arena-footer">
+        <div class="hint-text">
+          Use as teclas <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, <strong>D</strong> na sequência exata assim que surgir <strong>DRAW!</strong>
+        </div>
+        <div class="virtual-keypad">
+          <button class="vkey" data-key="W">W</button>
+          <div class="vkey-row">
+            <button class="vkey" data-key="A">A</button>
+            <button class="vkey" data-key="S">S</button>
+            <button class="vkey" data-key="D">D</button>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Modal de Resultado -->
+    <div class="result-modal" id="resultModal" aria-hidden="true">
+      <div class="result-card">
+        <div class="result-badge" id="resultBadge">VITÓRIA</div>
+        <h2 id="resultTitle">SEQUÊNCIA PERFEITA!</h2>
+        <p class="result-detail" id="resultDetail">Você completou a sequência em tempo recorde.</p>
+
+        <div class="stats-comparison">
+          <div class="stat-box player">
+            <span>SEU TEMPO</span>
+            <strong id="finalPlayerTime">1.42s</strong>
+          </div>
+          <div class="stat-box enemy">
+            <span>TEMPO DA IA</span>
+            <strong id="finalEnemyTime">1.89s</strong>
+          </div>
+          <div class="stat-box">
+            <span>ERROS</span>
+            <strong id="finalPlayerErrors">0</strong>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="western-btn primary" id="playAgainBtn">↺ Jogar Novamente (Espaço)</button>
+          <a href="../index.html" class="western-btn">Voltar aos Duelos</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

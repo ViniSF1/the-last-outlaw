@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Outlaw</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Cinzel:wght@600;800&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Efeito de vinheta e ambientação -->
+  <div class="crt-overlay"></div>
+  
+  <main class="game-wrapper">
+    <!-- Moldura de jogo estilo arcade/faroeste -->
+    <div class="screen-frame">
+      <!-- Fundo ambiental estendido para preencher os lados em 1920x1080 com efeito imersivo -->
+      <div class="ambient-backdrop"></div>
+
+      <div class="game-screen" id="gameScreen">
+        <!-- Imagem de fundo da tela inicial -->
+        <img src="imagens/Tela Inicial.png" alt="The Last Outlaw - Tela Inicial" id="bgImage" class="game-bg">
+
+        <!-- Canvas para partículas de poeira e brasas do entardecer -->
+        <canvas id="ambientCanvas" class="ambient-canvas"></canvas>
+
+        <!-- Hotspots interativos posicionados sobre o menu da imagem -->
+        <nav class="menu-overlay" aria-label="Menu Principal">
+          <!-- Indicador visual de mira (cursor do menu) -->
+          <div class="menu-crosshair" id="menuCrosshair" aria-hidden="true"></div>
+
+          <button class="menu-btn btn-jogar" id="btnJogar" data-index="0" aria-label="Jogar">
+            <span class="btn-highlight"></span>
+            <span class="btn-label">JOGAR</span>
+          </button>
+
+          <button class="menu-btn btn-config" id="btnConfig" data-index="1" aria-label="Configurações">
+            <span class="btn-highlight"></span>
+            <span class="btn-label">CONFIGURAÇÕES</span>
+          </button>
+
+          <button class="menu-btn btn-creditos" id="btnCreditos" data-index="2" aria-label="Créditos">
+            <span class="btn-highlight"></span>
+            <span class="btn-label">CRÉDITOS</span>
+          </button>
+
+          <button class="menu-btn btn-sair" id="btnSair" data-index="3" aria-label="Sair">
+            <span class="btn-highlight"></span>
+            <span class="btn-label">SAIR</span>
+          </button>
+        </nav>
+
+        <!-- Camada de Cenas de História (Cutscenes com Fade) -->
+        <section class="cutscene-layer" id="cutsceneLayer" aria-hidden="true">
+          <!-- Duas camadas para cross-fade suave e contínuo -->
+          <div class="cutscene-slide active" id="slideA">
+            <img src="" alt="Cena da história" class="cutscene-img" id="cutsceneImgA">
+          </div>
+          <div class="cutscene-slide" id="slideB">
+            <img src="" alt="Cena da história" class="cutscene-img" id="cutsceneImgB">
+          </div>
+
+          <!-- Barra de progresso dos 10 segundos -->
+          <div class="cutscene-progress-container">
+            <div class="cutscene-progress-bar" id="cutsceneProgressBar"></div>
+          </div>
+
+          <!-- HUD superior com indicador e botão de pular -->
+          <header class="cutscene-hud">
+            <div class="scene-badge" id="sceneBadge">PRÓLOGO — CENA 1 / 8</div>
+            <button class="skip-btn" id="skipCutsceneBtn" title="Pular história (Esc)">PULAR &gt;&gt;</button>
+          </header>
+
+          <!-- Dica inferior para avançar manualmente -->
+          <footer class="cutscene-hint">
+            <span>Clique ou aperte <strong>Espaço</strong> para avançar</span>
+          </footer>
+        </section>
+
+        <!-- Tela de Conclusão do Prólogo / Início do Ato I -->
+        <section class="prologue-end-layer" id="prologueEndLayer" aria-hidden="true">
+          <div class="prologue-end-card">
+            <h2>ATO I — O CAMINHO DA VINGANÇA</h2>
+            <p class="quote">"O ouro foi levado. Mas a justiça ainda não. Elias Crowe está de volta."</p>
+            <div class="prologue-end-actions">
+              <a href="mapa.html" class="modal-action-btn primary-gold" id="startAct1Btn">▶ ENTRAR NO MAPA (ATO I)</a>
+              <button class="modal-action-btn" id="replayStoryBtn">↺ REVER HISTÓRIA</button>
+              <button class="modal-close-btn" id="returnMenuBtn">MENU PRINCIPAL</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Barra inferior de status e áudio -->
+        <footer class="screen-footer" id="mainFooter">
+          <div class="audio-control">
+            <button id="toggleAudioBtn" class="pill-btn" title="Ativar/Desativar Som e Música">
+              <span id="audioIcon">🔇</span> <span id="audioText">Som: Desligado</span>
+            </button>
+          </div>
+          <div class="screen-hint">
+            <span>Use o Mouse ou ↑ ↓ e Enter</span>
+          </div>
+          <div class="version-tag">v0.1.0 Alpha</div>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL: Configurações -->
+  <dialog class="western-modal" id="modalConfig">
+    <div class="modal-box">
+      <header class="modal-header">
+        <h2>CONFIGURAÇÕES</h2>
+      </header>
+      <div class="modal-content">
+        <div class="setting-row">
+          <label for="masterVolume">Volume Geral</label>
+          <input type="range" id="masterVolume" min="0" max="100" value="70">
+          <span id="masterVolumeVal">70%</span>
+        </div>
+        <div class="setting-row">
+          <label for="musicVolume">Música de Fundo</label>
+          <input type="range" id="musicVolume" min="0" max="100" value="60">
+          <span id="musicVolumeVal">60%</span>
+        </div>
+        <div class="setting-row">
+          <label for="sfxVolume">Efeitos Sonoros</label>
+          <input type="range" id="sfxVolume" min="0" max="100" value="80">
+          <span id="sfxVolumeVal">80%</span>
+        </div>
+        <div class="setting-row">
+          <label for="fullscreenToggle">Tela Cheia</label>
+          <button id="fullscreenToggle" class="modal-action-btn">Alternar Tela Cheia</button>
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button class="modal-close-btn" id="closeConfigBtn">VOLTAR</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Créditos -->
+  <dialog class="western-modal" id="modalCreditos">
+    <div class="modal-box">
+      <header class="modal-header">
+        <h2>CRÉDITOS</h2>
+      </header>
+      <div class="modal-content credits-content">
+        <h3>THE LAST OUTLAW</h3>
+        <p class="credit-role">História & Conceito</p>
+        <p class="credit-name">Elias Crowe vs Silas Blackwood</p>
+
+        <p class="credit-role">Arte & Ilustrações</p>
+        <p class="credit-name">Pixel Art Western Edition</p>
+
+        <p class="credit-role">Desenvolvimento</p>
+        <p class="credit-name">HTML5, Canvas & Web Audio</p>
+
+        <p class="quote">"Alguns lutam por justiça. Outros, por liberdade."</p>
+      </div>
+      <footer class="modal-footer">
+        <button class="modal-close-btn" id="closeCreditosBtn">VOLTAR</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Sair -->
+  <dialog class="western-modal" id="modalSair">
+    <div class="modal-box">
+      <header class="modal-header">
+        <h2>SAIR DO JOGO</h2>
+      </header>
+      <div class="modal-content">
+        <p>Deseja guardar seu revólver e descansar na taverna?</p>
+      </div>
+      <footer class="modal-footer split">
+        <button class="modal-action-btn cancel" id="cancelSairBtn">CONTINUAR NO JOGO</button>
+        <button class="modal-action-btn danger" id="confirmSairBtn">SAIR</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

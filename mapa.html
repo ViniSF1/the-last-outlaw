@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Outlaw - Mapa do Ato I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Cinzel:wght@600;800&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/mapa.css">
+</head>
+<body>
+  <!-- Efeito sutil de vinheta atmosférica -->
+  <div class="crt-overlay"></div>
+
+  <!-- Contêiner Principal da Página do Mapa -->
+  <main class="map-page-wrapper">
+    <!-- Barra Superior de Status do Pistoleiro (HUD Roguelike) -->
+    <header class="player-hud">
+      <div class="hud-character">
+        <span class="hud-avatar">🤠</span>
+        <div class="hud-char-info">
+          <span class="hud-char-name">ELIAS CROWE</span>
+          <span class="hud-act-name">ATO I: A FRONTEIRA SEM LEI</span>
+        </div>
+      </div>
+
+      <div class="hud-stats">
+        <div class="hud-stat lives" title="Vidas">
+          <span class="stat-icon">❤️</span>
+          <span class="stat-val" id="playerLivesVal">❤️❤️❤️</span>
+        </div>
+        <div class="hud-stat floor" title="Andar da Jornada">
+          <span class="stat-icon">📍</span>
+          <span class="stat-val" id="playerFloorVal">Andar 1 / 10</span>
+        </div>
+      </div>
+
+      <div class="hud-actions">
+        <button class="pill-btn primary" id="newRunBtn" title="Gerar um novo mapa procedural">
+          <span>🎲</span> Nova Run
+        </button>
+        <button class="pill-btn" id="toggleAudioBtn" title="Ligar/Desligar Áudio">
+          <span id="audioIcon">🔊</span>
+        </button>
+        <a href="index.html" class="pill-btn" id="returnMenuBtn" title="Voltar à tela inicial">
+          <span>🏠</span> Menu
+        </a>
+      </div>
+    </header>
+
+    <!-- Área de Rolagem Vertical do Mapa (Sobe da Base até o Topo) -->
+    <div class="map-scroll-viewport" id="mapScrollViewport">
+      <div class="map-board" id="mapBoard">
+        <!-- Fundo de Pergaminho Ilustrado -->
+        <div class="parchment-background">
+          <!-- Ilustrações decorativas do Velho Oeste -->
+          <div class="decor-compass" aria-hidden="true"></div>
+          <div class="decor-doodle canyon-left" aria-hidden="true"></div>
+          <div class="decor-doodle train-right" aria-hidden="true"></div>
+          <div class="decor-doodle saloon-left" aria-hidden="true"></div>
+          <div class="decor-doodle mine-right" aria-hidden="true"></div>
+        </div>
+
+        <!-- Cabeçalho do Mapa -->
+        <div class="map-header-banner">
+          <h1 class="map-title">THE LAST OUTLAW</h1>
+          <h2 class="map-subtitle">ACT I: THE LAWLESS FRONTIER</h2>
+          <div class="seed-indicator" id="seedIndicator">Mapa Procedural Gerado</div>
+        </div>
+
+        <!-- Camada SVG de Conexões de Rotas -->
+        <svg class="map-routes-svg" id="mapRoutesSvg"></svg>
+
+        <!-- Camada de Nós / Objetivos do Mapa (Centrados com precisão) -->
+        <div class="map-nodes-layer" id="mapNodesLayer"></div>
+
+        <!-- Legenda do Mapa no Rodapé do Pergaminho -->
+<footer class="map-board-legend">
+        <div class="legend-badge"><span class="legend-ico combat"></span> Combate Normal</div>
+        <div class="legend-badge"><span class="legend-ico elite"></span> Combate de Elite</div>
+        <div class="legend-badge"><span class="legend-ico rest"></span> Fogueira / Descanso</div>
+        <div class="legend-badge"><span class="legend-ico boss"></span> Chefe: Hank Mercer</div>
+      </footer>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE ENCONTRO / DECISÃO DO NÓ -->
+  <div class="encounter-modal-overlay" id="encounterOverlay" aria-hidden="true">
+    <div class="encounter-modal-card" id="encounterCard">
+      <header class="encounter-card-header">
+        <span class="encounter-badge" id="encounterBadge">COMBATE</span>
+        <h3 id="encounterTitle">Título do Encontro</h3>
+      </header>
+
+      <div class="encounter-card-body">
+        <div class="encounter-icon-preview" id="encounterIconPreview">⚔️</div>
+        <p class="encounter-story" id="encounterStory">Texto narrativo do encontro...</p>
+        <div class="encounter-reward-box" id="encounterRewardBox">Recompensa estimada</div>
+      </div>
+
+      <footer class="encounter-card-actions" id="encounterActions">
+        <!-- Botões de escolha inseridos dinamicamente -->
+      </footer>
+    </div>
+  </div>
+
+  <!-- MODAL DE VITÓRIA DO ATO I -->
+  <dialog class="victory-modal" id="victoryModal">
+    <div class="victory-card">
+      <span class="victory-star">⭐</span>
+      <h2>XERIFE HANK MERCER DERROTADO!</h2>
+      <p class="victory-quote">"O silêncio volta a reinar sobre Blackwater Pass. O xerife corrupto caiu, mas o rastro de Silas Blackwood leva para além das montanhas."</p>
+      <div class="victory-stats">
+        <p><strong>Ato I Concluído com Sucesso!</strong></p>
+        <p>O silêncio volta a reinar sobre Blackwater Pass.</p>
+      </div>
+      <div class="victory-actions">
+        <button class="pill-btn primary" id="victoryNewRunBtn">🎲 Jogar Novamente (Nova Run)</button>
+        <a href="index.html" class="pill-btn">🏠 Menu Principal</a>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="js/mapa.js"></script>
+</body>
+</html>
